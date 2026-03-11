@@ -44,7 +44,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
   useEffect(() => {
   calculateSimulator();
-}, []);
+  }, []);
 
   const formatPrice = (price: number) => {
     if (price >= 100000000) {
