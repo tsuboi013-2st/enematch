@@ -1,12 +1,11 @@
 'use client';
 
-import { use, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { properties } from '@/data/properties';
 
-export default function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const property = properties.find(p => p.id === resolvedParams.id);
+export default function PropertyDetailPage({ params }: { params: { id: string } }) {
+  const property = properties.find(p => p.id === params.id);
   const [currentImage, setCurrentImage] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
@@ -32,19 +31,22 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
   // Calculate simulator results
   const calculateSimulator = () => {
-    if (property.yield > 0) {
-      const annualRevenue = (property.price * property.yield) / 100;
-      setSimulatorData(prev => ({
-        ...prev,
-        annualRevenue: annualRevenue,
-        annualCost: annualRevenue * 0.15, // Assume 15% operating cost
-      }));
-    }
-  };
+  if (!property) return;
 
-  useEffect(() => {
+  if (property.yield > 0) {
+    const annualRevenue = (property.price * property.yield) / 100;
+
+    setSimulatorData(prev => ({
+      ...prev,
+      annualRevenue: annualRevenue,
+      annualCost: annualRevenue * 0.15,
+    }));
+  }
+};
+
+useEffect(() => {
   calculateSimulator();
-  }, []);
+}, []);
 
   const formatPrice = (price: number) => {
     if (price >= 100000000) {
