@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useState } from 'react';
+import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { properties } from '@/data/properties';
 
@@ -42,9 +42,9 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     }
   };
 
-  useState(() => {
-    calculateSimulator();
-  });
+  useEffect(() => {
+  calculateSimulator();
+}, []);
 
   const formatPrice = (price: number) => {
     if (price >= 100000000) {
